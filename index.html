@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#fff4f2">
+  <title>Саша, пойдём на свидание?</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #38252b;
+      --muted: #806b70;
+      --rose: #ee6680;
+      --rose-dark: #dc4d6d;
+      --cream: #fffaf5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      min-height: 100svh;
+      margin: 0;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      padding: 24px;
+      color: var(--ink);
+      font-family: ui-rounded, "SF Pro Rounded", "Segoe UI", system-ui, sans-serif;
+      background:
+        radial-gradient(ellipse at 15% 15%, #ffe2df 0, transparent 38%),
+        radial-gradient(ellipse at 90% 85%, #ffe9d4 0, transparent 37%),
+        linear-gradient(135deg, #fff8f1, #fff0f4);
+    }
+    .sparkle { position: fixed; z-index: 0; pointer-events: none; opacity: .65; animation: float 5s ease-in-out infinite; }
+    .s1 { top: 12%; left: 13%; font-size: 25px; }
+    .s2 { top: 20%; right: 16%; font-size: 19px; animation-delay: -2s; }
+    .s3 { bottom: 16%; left: 19%; font-size: 18px; animation-delay: -3s; }
+    .s4 { bottom: 21%; right: 12%; font-size: 27px; animation-delay: -1s; }
+    .card {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 510px);
+      padding: 48px 36px 38px;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,.85);
+      border-radius: 32px;
+      background: rgba(255,255,255,.78);
+      box-shadow: 0 24px 80px rgba(138, 75, 83, .14), inset 0 1px 0 white;
+      backdrop-filter: blur(14px);
+      animation: appear .8s cubic-bezier(.2,.8,.2,1) both;
+    }
+    .illustration {
+      width: 98px; height: 98px; margin: 0 auto 23px;
+      display: grid; place-items: center;
+      border-radius: 30px;
+      background: linear-gradient(145deg, #ffe2e2, #fff0dc);
+      box-shadow: 0 10px 25px rgba(232, 110, 127, .16);
+      font-size: 48px;
+      animation: bob 3s ease-in-out infinite;
+    }
+    .eyebrow { margin: 0 0 11px; color: var(--rose-dark); font-size: 12px; font-weight: 800; letter-spacing: .19em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(31px, 8vw, 43px); line-height: 1.12; letter-spacing: -.045em; }
+    h1 span { color: var(--rose-dark); }
+    .message { max-width: 355px; margin: 17px auto 0; color: var(--muted); font-size: 16px; line-height: 1.65; }
+    .question { margin: 9px 0 26px; color: var(--ink); font-size: 18px; font-weight: 700; }
+    .buttons { min-height: 58px; display: flex; justify-content: center; align-items: center; gap: 13px; position: relative; }
+    button { border: 0; border-radius: 999px; padding: 15px 27px; font: inherit; font-size: 15px; font-weight: 750; cursor: pointer; transition: transform .22s ease, box-shadow .22s ease, background .22s ease, opacity .2s ease; }
+    button:focus-visible { outline: 3px solid #f5a8b6; outline-offset: 4px; }
+    #yes {
+      color: white;
+      background: linear-gradient(135deg, #f37b8f, #e85475);
+      box-shadow: 0 9px 21px rgba(222, 75, 108, .3);
+    }
+    #yes:hover { transform: translateY(-3px) scale(1.04); box-shadow: 0 13px 25px rgba(222, 75, 108, .36); }
+    #no { color: #796a6d; background: #f5efee; }
+    #no:hover { background: #eee5e4; }
+    .hint { min-height: 22px; margin: 13px 0 0; color: #a38d91; font-size: 12px; }
+    .footer { margin-top: 28px; color: #b29da0; font-size: 12px; }
+    .success { display: none; margin-top: 19px; color: var(--rose-dark); font-weight: 750; font-size: 17px; animation: appear .45s ease both; }
+    .card.accepted .question, .card.accepted .hint { display: none; }
+    .card.accepted .buttons { min-height: 69px; }
+    .card.accepted #yes { padding: 18px 38px; font-size: 18px; transform: scale(1.06); }
+    .card.accepted .success { display: block; }
+    .heart { position: fixed; z-index: 4; pointer-events: none; animation: rise 1.5s ease-out forwards; }
+    @keyframes appear { from { opacity: 0; transform: translateY(14px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
+    @keyframes float { 50% { transform: translateY(-10px) rotate(8deg); } }
+    @keyframes bob { 50% { transform: translateY(-5px) rotate(2deg); } }
+    @keyframes rise { to { opacity: 0; transform: translateY(-110px) rotate(18deg) scale(1.5); } }
+    @media (max-width: 440px) { .card { padding: 38px 23px 30px; border-radius: 27px; } .message { font-size: 15px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body>
+  <span class="sparkle s1" aria-hidden="true">✦</span>
+  <span class="sparkle s2" aria-hidden="true">♡</span>
+  <span class="sparkle s3" aria-hidden="true">✧</span>
+  <span class="sparkle s4" aria-hidden="true">♥</span>
+
+  <main class="card" id="card">
+    <div class="illustration" aria-hidden="true">💌</div>
+    <p class="eyebrow">для самой особенной</p>
+    <h1>Саша, <span>пойдём</span><br>на свидание?</h1>
+    <p class="message">Хочу провести с тобой чудесный вечер — вкусная еда, прогулка и ты рядом. Что скажешь?</p>
+    <p class="question">Будешь моей спутницей? 💕</p>
+    <div class="buttons" id="buttons">
+      <button id="yes" type="button">Да, конечно! 💖</button>
+      <button id="no" type="button">Нет</button>
+    </div>
+    <p class="hint" id="hint" aria-live="polite"></p>
+    <p class="success" id="success" aria-live="polite">Ура! Это будет наше лучшее свидание ✨</p>
+    <div class="footer">с любовью, только для тебя ♡</div>
+  </main>
+
+  <script>
+    const card = document.querySelector('#card');
+    const noButton = document.querySelector('#no');
+    const yesButton = document.querySelector('#yes');
+    const hint = document.querySelector('#hint');
+    let noClicks = 0;
+
+    noButton.addEventListener('click', () => {
+      noClicks += 1;
+      if (noClicks >= 3) {
+        noButton.remove();
+        hint.textContent = 'Кажется, тут остался только один ответ 😊';
+        yesButton.animate([
+          { transform: 'scale(1)' }, { transform: 'scale(1.16)' }, { transform: 'scale(1)' }
+        ], { duration: 450, easing: 'ease-out' });
+        return;
+      }
+      hint.textContent = noClicks === 1 ? 'Ой, кнопка смущается… попробуй ещё раз 😉' : 'Она явно не хочет, чтобы ты нажимала на неё 😄';
+      const bounds = card.getBoundingClientRect();
+      const buttonBounds = noButton.getBoundingClientRect();
+      const maxX = Math.max(0, Math.min(105, (bounds.width - buttonBounds.width) / 2));
+      const maxY = 34;
+      const x = (Math.random() * 2 - 1) * maxX;
+      const y = (Math.random() * 2 - 1) * maxY;
+      noButton.style.transform = `translate(${x}px, ${y}px) rotate(${(Math.random() - .5) * 14}deg)`;
+    });
+
+    yesButton.addEventListener('click', () => {
+      if (card.classList.contains('accepted')) return;
+      card.classList.add('accepted');
+      noButton.remove();
+      hint.textContent = '';
+      for (let i = 0; i < 18; i++) {
+        const heart = document.createElement('span');
+        heart.className = 'heart';
+        heart.textContent = ['💖', '💕', '✨', '💗'][Math.floor(Math.random() * 4)];
+        heart.style.left = `${10 + Math.random() * 80}vw`;
+        heart.style.top = `${55 + Math.random() * 35}vh`;
+        heart.style.fontSize = `${16 + Math.random() * 18}px`;
+        heart.style.animationDelay = `${Math.random() * .4}s`;
+        document.body.append(heart);
+        setTimeout(() => heart.remove(), 2100);
+      }
+    });
+  </script>
+</body>
+</html>
